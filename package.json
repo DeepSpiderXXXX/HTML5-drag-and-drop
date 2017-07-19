@@ -1,0 +1,25 @@
+{
+  "name": "HTML5-drag-and-drop",
+  "version": "1.0.0",
+  "description": "拖拽表与字段生成SQL,基于HTML5 拖拽接口(Drag and drop tables with fields to generate SQL, drag-and-drop interfaces based on HTML5)",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-webserver": "^0.9.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vincent-xw/HTML5-drag-and-drop.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vincent-xw/HTML5-drag-and-drop/issues"
+  },
+  "homepage": "https://github.com/vincent-xw/HTML5-drag-and-drop#readme"
+}
