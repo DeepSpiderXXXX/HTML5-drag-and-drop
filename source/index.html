@@ -13,33 +13,31 @@
 <body>
     <div class="container">
         <div class="col-md-3">
-            <div class="panel panel-default">
+            <div class="panel panel-default treeList">
                 <div class="panel-heading">表及字段</div>
                 <div class="panel-body">
-                    <abn-tree tree-data="myData" tree-control="my_tree" on-select="my_tree_handler(branch)" expand-level="2" initial-selection="Granny Smith"></abn-tree>
+                    <abn-tree tree-data="myData" tree-control="my_tree" on-select="my_tree_handler(branch)" expand-level="2"></abn-tree>
                     
                 </div>
             </div>
         </div>
         <div class="col-md-9">
             <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">数据表及关联</div>
-                    <div class="panel-body" ng-drop="true" ng-drop-success="onDropComplete1($data,$event,'table')">
+                <div class="panel panel-default"  ng-drop="true" ng-drop-success="onDropTable($data,$event)">
+                    <div class="panel-heading">数据表及关联 <span class="glyphicon glyphicon-menu-hamburger to-right"></span></div>
+                    <div class="panel-body">
                         <p class="lead">此处展示与编辑表格信息</p>
-                        <div class="col-md-3" ng-repeat="data in tableGroup">
+                        <div class="col-md-3" ng-repeat="data in tableGroup track by $index">
                             <div class="input-group input-group-sm">
                                 <input type="text" ng-disabled="true" class="form-control" title="{{data.label}}" value="{{data.label}}">
                                 <div class="input-group-btn">
-                                    <button type="button" class="btn btn-default">
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </button>
                                     <button type="button" class="btn btn-default" ng-click="data">
                                         <span class="glyphicon glyphicon-remove"></span>
                                     </button>
                                 </div>
                             </div>
                         </div>
+                        <br>
                         <hr>
                         <p class="lead">此处展示表格关联信息</p>
                         <table class="table association">
@@ -53,9 +51,9 @@
                 </div>
             </div>
             <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">显示结果字段关联</div>
-                    <div class="panel-body" ng-drop="true" ng-drop-success="onDropComplete1($data,$event,'result')">
+                <div class="panel panel-default" ng-drop="true" ng-drop-success="onDropResult($data,$event)">
+                    <div class="panel-heading">显示结果字段关联 <span class="glyphicon to-right" ng-class="{'glyphicon-resize-small':resultFull,'glyphicon-resize-full':!resultFull}" ng-click="resizeFrame('result')"></span></div>
+                    <div class="panel-body" ng-class="{'resultFull':resultFull, 'resultSmall':!resultFull}">
                         <div class="col-md-3" ng-repeat="data in resultGroup">
                             <div class="input-group input-group-sm">
                                 <input type="text" ng-disabled="true" class="form-control" title="{{data.label}}" value="{{data.label}}">
@@ -73,18 +71,51 @@
                 </div>
             </div>
             <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">查询条件</div>
-                    <div class="panel-body" ng-drop="true" ng-drop-success="onDropComplete1($data,$event,'search')">
-                        内容区域
+                <div class="panel panel-default"  ng-drop="true" ng-drop-success="onDropSearch($data,$event)">
+                    <div class="panel-heading">
+                        查询条件
+                        <span class="glyphicon to-right" ng-class="{'glyphicon-resize-small':searchFull,'glyphicon-resize-full':!searchFull}" ng-click="resizeFrame('search')"></span> 
+                        <span class="glyphicon glyphicon-list to-right"></span>
+                    </div>
+                    <div class="panel-body"  ng-class="{'searchFull':searchFull,'searchSmall':!searchFull}">
+                        <div class="col-md-3" ng-repeat="data in searchGroup">
+                            <div class="input-group input-group-sm">
+                                <input type="text" ng-disabled="true" class="form-control" title="{{data.label}}" value="{{data.label}}">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default" ng-click="data">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">分组筛选条件</div>
-                    <div class="panel-body" ng-drop="true" ng-drop-success="onDropComplete1($data,$event,'filter')">
-                        内容区域
+                <div class="panel panel-default" ng-drop="true" ng-drop-success="onDropFilter($data,$event)">
+                    <div class="panel-heading">
+                        分组筛选条件 
+                        <span class="glyphicon to-right"  ng-class="{'glyphicon-resize-small':filterFull,'glyphicon-resize-full':!filterFull}" ng-click="resizeFrame('filter')"></span>
+                        <span class="glyphicon glyphicon-list to-right"></span>
+                        
+                    </div>
+                    <div class="panel-body" ng-class="{'filterFull':filterFull,'filterSmall':!filterFull}">
+                        <div class="col-md-3" ng-repeat="data in filterGroup">
+                            <div class="input-group input-group-sm">
+                                <input type="text" ng-disabled="true" class="form-control" title="{{data.label}}" value="{{data.label}}">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default" ng-click="data">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

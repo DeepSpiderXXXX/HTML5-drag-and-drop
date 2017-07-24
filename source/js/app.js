@@ -1,6 +1,7 @@
 var app = angular.module('app', ['angularBootstrapNavTree','ngDraggable']);
 
 app.controller("mainCtrl",['$scope','generatTree',function($scope,generatTree){
+
     $scope.loadData = [{id:1,pid:0,value:'0',name:'数据库',type:'database'},
         {id:2,pid:1,value:'ENTRY_HEAD',name:'报关单表头',type:'table'},
         {id:3,pid:2,value:'ENTRY_ID',name:'海关编号',type:'field'},
@@ -226,37 +227,86 @@ app.controller("mainCtrl",['$scope','generatTree',function($scope,generatTree){
         {id:223,pid:177,value:'REMARK',name:'备注',type:'field'},
         {id:224,pid:177,value:'EXIT_CUSTOMS_CODE',name:'境外离境地海关代码',type:'field'}];
         
+        $scope.resultFull = false;
+        $scope.searchFull = false;
+        $scope.filterFull = false;
+        $scope.resizeFrame = function(str){
+            if(str == "result"){
+                $scope.resultFull = !$scope.resultFull;
+            }else if(str == "search"){
+                $scope.searchFull = !$scope.searchFull;
+            }else{
+                $scope.filterFull = !$scope.filterFull;
+            }
+        }
+
         $scope.myData = generatTree($scope.loadData);
         console.log($scope.myData);
         
         $scope.tableGroup = [];
         $scope.resultGroup = [];
-        $scope.onDropComplete1=function(data,evt,str){
+        $scope.searchGroup = [];
+        $scope.filterGroup = [];
+        $scope.onDropTable = function(data,evt){
             console.log(data);
             console.log(evt);
             var temp = {};
-            if(str == 'table'){
-                if(data.level == 2){
-                    temp = data;
-                    for(var i = 0; i < $scope.myData[0].children.length; i++){
-                        if($scope.myData[0].children[i].id == data.branch.id){
-                            temp.children = $scope.myData[0].children[i].children;
-                        }
-                    }
-                    $scope.tableGroup.push(temp);
-                }
-            }else{
-                if(data.level == 3){
-                    for(var i = 0; i < $scope.myData[0].children.length; i++){
-                        if($scope.myData[0].children[i].id == data.branch.pid){
-                            temp.parent = $scope.myData[0].children[i].children;
-                        }
-                    }
-                    if(str == 'result'){
-                        $scope.resultGroup.push(temp);
+            if(data.level == 2){
+                temp = data;
+                for(var i = 0; i < $scope.myData[0].children.length; i++){
+                    if($scope.myData[0].children[i].id == data.branch.id){
+                        temp.children = $scope.myData[0].children[i].children;
                     }
                 }
+                $scope.tableGroup.push(temp);
             }
-            console.log($scope.resultGroup);
+            
+        }
+        $scope.onDropResult = function(data,evt){
+            console.log(data);
+            console.log(evt);
+            var temp = {};
+            
+            if(data.level == 3){
+                temp = data;
+                for(var i = 0; i < $scope.myData[0].children.length; i++){
+                    if($scope.myData[0].children[i].id == data.branch.pid){
+                        temp.parent = $scope.myData[0].children[i].children;
+                    }
+                }
+                $scope.resultGroup.push(temp);
+                
+            }
+        }
+        $scope.onDropSearch = function(data,evt){
+            console.log(data);
+            console.log(evt);
+            var temp = {};
+            
+            if(data.level == 3){
+                temp = data;
+                for(var i = 0; i < $scope.myData[0].children.length; i++){
+                    if($scope.myData[0].children[i].id == data.branch.pid){
+                        temp.parent = $scope.myData[0].children[i].children;
+                    }
+                }
+                $scope.searchGroup.push(temp);
+            }
+            
+        }
+        $scope.onDropFilter = function(data,evt){
+            console.log(data);
+            console.log(evt);
+            var temp = {};
+           
+            if(data.level == 3){
+                temp = data;
+                for(var i = 0; i < $scope.myData[0].children.length; i++){
+                    if($scope.myData[0].children[i].id == data.branch.pid){
+                        temp.parent = $scope.myData[0].children[i].children;
+                    }
+                }
+                $scope.filterGroup.push(temp);
+            }
         }
 }]);
