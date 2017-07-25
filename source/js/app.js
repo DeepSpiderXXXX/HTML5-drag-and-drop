@@ -246,6 +246,7 @@ app.controller("mainCtrl",['$scope','generatTree',function($scope,generatTree){
         console.log($scope.myData);
         
         $scope.tableGroup = [];
+        $scope.fileds = [];
         $scope.resultGroup = [];
         $scope.searchGroup = [];
         $scope.filterGroup = [];
@@ -317,30 +318,79 @@ app.controller("mainCtrl",['$scope','generatTree',function($scope,generatTree){
                 if(angular.isArray(arr)){
                     for(var i = 0; i < arr.length; i++){
                         var temp = {};
+                        temp.id = arr[i].branch.id;
+                        temp.children = arr[i].children;
                         temp.key = arr[i].branch.name;
                         temp.value = arr[i].branch.value;
                         result.push(temp);
                     }
                     return result;
                 }else{
-                    return -1;
+                    return 0;
                 }
                 
             }
+            //初始化字段循环
+            $scope.generatFileds = function(){
+                
+            }
             
-        $scope.showModel = function(str){
+        $scope.showModel = function(str,obj,index){
             if(str == "tableAssociation"){
                 if($scope.tableGroup.length == 0 || !$scope.tableGroup){
                     alert("请先从左侧拖拽表到编辑表信息区域");
                 }else{
                     
                     $scope.tableSelect = $scope.generatTable($scope.tableGroup);
-                    
+                    var filedTemp = {};
+                    for(var i = 0; i < $scope.tableSelect.length; i++){
+                        filedTemp["table"+i] = {
+                            "key":"请先选择表",
+                            "value":""
+                        }
+                    }
+                    $scope.fileds = [{
+                        id:0,
+                        fileds:filedTemp
+                    }];
                     $scope.model.title = "添加表关联";
                     $scope.model.table = true;
+                    $scope.model.filed = false;
                     $('#myModal').modal();
                 }
                 
+            }else if(str == "resultData"){
+                $scope.modelFiled = {};
+                angular.copy(obj,$scope.modelFiled);
+                $scope.model.title = "编辑字段";
+                $scope.model.table = false;
+                $scope.model.filed = true;
+                $('#myModal').modal();
             }
+        }
+        //验证序列化的表单是否完整
+        $scope.checkTableComplete = function(arr){
+            for(var i = 0; i < arr.length; i ++){
+                if(arr[i].name == "" || arr[i].value == ""){
+                    return 0;
+                }
+            }
+            return true;
+        }
+        //保存表关联信息
+        $scope.tableJoinInfo = {};
+        $scope.tableSave = function(){
+            var array = $("#table").serializeArray();
+            if($scope.checkTableComplete(array)){
+                for(var i = 0; i < array.length; i++){
+                    console.log(array[i]);
+                }
+            }else{
+                alert("请检查并填写完整的表单");
+            }
+        }
+        //保存字段编辑数据
+        $scope.saveFiled = function(obj){
+            console.log(obj);
         }
 }]);
