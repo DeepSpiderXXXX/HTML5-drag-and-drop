@@ -24,7 +24,7 @@
         <div class="col-md-9">
             <div class="col-md-12">
                 <div class="panel panel-default"  ng-drop="true" ng-drop-success="onDropTable($data,$event)">
-                    <div class="panel-heading">数据表及关联 <span class="glyphicon glyphicon-menu-hamburger to-right"></span></div>
+                    <div class="panel-heading">数据表及关联 <span class="glyphicon glyphicon-menu-hamburger to-right" ng-click="showModel('tableAssociation')"></span></div>
                     <div class="panel-body">
                         <p class="lead">此处展示与编辑表格信息</p>
                         <div class="col-md-3" ng-repeat="data in tableGroup track by $index">
@@ -124,24 +124,66 @@
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">操作<span ng-bind="title | title"></span></h4>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+            <div class="modal-content" >
+                <form id="table" ng-if="model.table">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">操作<span ng-bind="model.title | title"></span></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div ng-repeat="data in tableGroup">
+                            <div class="col-md-12">
+                                <div class="col-md-2">
+                                    <label style="margin-top: 6px;" for="">数据表{{$index+1}}</label>
+                                </div>
+                                <div class="col-md-5">
+                                    <select ng-options="op.value as op.key for op in tableSelect" name="table{{$index}}" ng-model="table" class="form-control" >
+                                        <option value="">请选择</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12" ng-if="$index != tableGroup.length - 1">
+                                <div class="col-md-2">
+                                    <label style="margin-top: 6px;" for="">关联关系</label>
+                                </div>
+                                <div class="col-md-5">
+                                    <select ng-model="table1" class="form-control" name="joinType{{$index}}">
+                                        <option value="">请选择</option>
+                                        <option value="JOIN">内联</option>
+                                        <option value="LEFT JOIN">左关联</option>
+                                        <option value="RIGHT JOIN">右关联</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" >保存</button>
+                    </div>
+                </form>
+                <form name="failed" novalidate ng-if="model.filed">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">操作<span ng-bind="model.title | title"></span></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-md-12">
+                            
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </body>
 <script src="js/angular.min.js"></script>
 <script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <script src="js/ngDraggable.js"></script>
 <script src="js/abn_tree_directive.js"></script>
 <script src="js/app.js"></script>

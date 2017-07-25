@@ -227,6 +227,7 @@ app.controller("mainCtrl",['$scope','generatTree',function($scope,generatTree){
         {id:223,pid:177,value:'REMARK',name:'备注',type:'field'},
         {id:224,pid:177,value:'EXIT_CUSTOMS_CODE',name:'境外离境地海关代码',type:'field'}];
         
+        //初始化窗口控制
         $scope.resultFull = false;
         $scope.searchFull = false;
         $scope.filterFull = false;
@@ -240,6 +241,7 @@ app.controller("mainCtrl",['$scope','generatTree',function($scope,generatTree){
             }
         }
 
+        //初始化列表树
         $scope.myData = generatTree($scope.loadData);
         console.log($scope.myData);
         
@@ -248,11 +250,14 @@ app.controller("mainCtrl",['$scope','generatTree',function($scope,generatTree){
         $scope.searchGroup = [];
         $scope.filterGroup = [];
         $scope.onDropTable = function(data,evt){
-            console.log(data);
-            console.log(evt);
             var temp = {};
             if(data.level == 2){
                 temp = data;
+                for(var i = 0; i < $scope.tableGroup.length; i++){
+                    if(temp.branch.id == $scope.tableGroup[i].branch.id){
+                        return  false;
+                    }
+                }
                 for(var i = 0; i < $scope.myData[0].children.length; i++){
                     if($scope.myData[0].children[i].id == data.branch.id){
                         temp.children = $scope.myData[0].children[i].children;
@@ -263,8 +268,6 @@ app.controller("mainCtrl",['$scope','generatTree',function($scope,generatTree){
             
         }
         $scope.onDropResult = function(data,evt){
-            console.log(data);
-            console.log(evt);
             var temp = {};
             
             if(data.level == 3){
@@ -279,8 +282,6 @@ app.controller("mainCtrl",['$scope','generatTree',function($scope,generatTree){
             }
         }
         $scope.onDropSearch = function(data,evt){
-            console.log(data);
-            console.log(evt);
             var temp = {};
             
             if(data.level == 3){
@@ -295,8 +296,6 @@ app.controller("mainCtrl",['$scope','generatTree',function($scope,generatTree){
             
         }
         $scope.onDropFilter = function(data,evt){
-            console.log(data);
-            console.log(evt);
             var temp = {};
            
             if(data.level == 3){
@@ -307,6 +306,41 @@ app.controller("mainCtrl",['$scope','generatTree',function($scope,generatTree){
                     }
                 }
                 $scope.filterGroup.push(temp);
+            }
+        }
+
+        //初始化弹出框
+        $scope.model = {};
+            //初始化表格循环
+            $scope.generatTable = function(arr){
+                var result = [];
+                if(angular.isArray(arr)){
+                    for(var i = 0; i < arr.length; i++){
+                        var temp = {};
+                        temp.key = arr[i].branch.name;
+                        temp.value = arr[i].branch.value;
+                        result.push(temp);
+                    }
+                    return result;
+                }else{
+                    return -1;
+                }
+                
+            }
+            
+        $scope.showModel = function(str){
+            if(str == "tableAssociation"){
+                if($scope.tableGroup.length == 0 || !$scope.tableGroup){
+                    alert("请先从左侧拖拽表到编辑表信息区域");
+                }else{
+                    
+                    $scope.tableSelect = $scope.generatTable($scope.tableGroup);
+                    
+                    $scope.model.title = "添加表关联";
+                    $scope.model.table = true;
+                    $('#myModal').modal();
+                }
+                
             }
         }
 }]);
