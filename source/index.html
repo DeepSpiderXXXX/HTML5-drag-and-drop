@@ -137,7 +137,7 @@
                                     <label for="">数据表{{$index+1}}</label>
                                 </div>
                                 <div class="col-md-5">
-                                    <select  ng-options="op.value as op.key for op in tableSelect" name="table{{$index}}" ng-model="table" class="form-control" >
+                                    <select  ng-options="op.value as op.key for op in tableSelect" name="table{{$index}}" ng-model="aaa" class="form-control" ng-change="changeFileds(aaa,$index)">
                                         <option value="">请选择</option>
                                     </select>
                                 </div>
@@ -160,10 +160,10 @@
                             <div ng-repeat="data1 in data.fileds">
                                 <div class="col-md-12">
                                     <div class="col-md-3">
-                                        <label for="">数据表1字段</label>
+                                        <label for="">数据表{{$index}}字段</label>
                                     </div>
                                     <div class="col-md-5">
-                                        <select ng-model="table1" ng-options="op.value as op.name for op in filed1" class="form-control" name="filed{{$index}}">
+                                        <select  ng-model="table1" ng-options="op.value as op.name for op in data1" class="form-control table{{$index}}" name="filed{{$index}}">
                                             <option value="">请选择</option>
                                         </select>
                                     </div>
@@ -171,6 +171,14 @@
                             </div>
                             
                         </div> 
+                        <div class="col-md-12">
+                            <div class="col-md-3 text-center">
+                                <button class="btn btn-primary">添加</button>
+                            </div>
+                            <div class="col-md-3 text-center" ng-if="fileds > 1 ">
+                                <button class="btn btn-danger">删除</button>
+                            </div>
+                        </div>
                         <div class="clearfix"></div>
                     </div>
                     <div class="modal-footer">

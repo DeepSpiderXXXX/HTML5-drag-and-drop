@@ -240,10 +240,17 @@ app.controller("mainCtrl",['$scope','generatTree',function($scope,generatTree){
                 $scope.filterFull = !$scope.filterFull;
             }
         }
-
+        //获取表格信息
+        $scope.getTableInfo = function(str){
+            for(var i = 0; i < $scope.myData[0].children.length; i++){
+                if($scope.myData[0].children[i].value == str){
+                    return $scope.myData[0].children[i].children;
+                }
+            }
+            return 0;
+        }
         //初始化列表树
         $scope.myData = generatTree($scope.loadData);
-        console.log($scope.myData);
         
         $scope.tableGroup = [];
         $scope.fileds = [];
@@ -331,8 +338,21 @@ app.controller("mainCtrl",['$scope','generatTree',function($scope,generatTree){
                 
             }
             //初始化字段循环
-            $scope.generatFileds = function(){
-                
+            $scope.generatFileds = function(str){
+                if(str == "gene"){
+                    var filedTemp = {};
+                    for(var i = 0; i < $scope.tableSelect.length; i++){
+                        filedTemp["table"+i] = [{
+                            "name":"请先选择表",
+                            "value":""
+                        }]
+                    }
+                    var temp = {
+                        fileds:filedTemp
+                    }
+                    $scope.fileds = [];
+                    $scope.fileds.push(temp);
+                }
             }
             
         $scope.showModel = function(str,obj,index){
@@ -342,17 +362,8 @@ app.controller("mainCtrl",['$scope','generatTree',function($scope,generatTree){
                 }else{
                     
                     $scope.tableSelect = $scope.generatTable($scope.tableGroup);
-                    var filedTemp = {};
-                    for(var i = 0; i < $scope.tableSelect.length; i++){
-                        filedTemp["table"+i] = {
-                            "key":"请先选择表",
-                            "value":""
-                        }
-                    }
-                    $scope.fileds = [{
-                        id:0,
-                        fileds:filedTemp
-                    }];
+                    $scope.generatFileds('gene');
+                    
                     $scope.model.title = "添加表关联";
                     $scope.model.table = true;
                     $scope.model.filed = false;
@@ -366,6 +377,13 @@ app.controller("mainCtrl",['$scope','generatTree',function($scope,generatTree){
                 $scope.model.table = false;
                 $scope.model.filed = true;
                 $('#myModal').modal();
+            }
+        }
+        //表字段序列化
+        $scope.changeFileds = function(data,index){
+            for(var i = 0; i < $scope.fileds.length; i++){
+                $scope.fileds[i].fileds['table'+index] = [];
+                $scope.fileds[i].fileds['table'+index] = $scope.getTableInfo(data);
             }
         }
         //验证序列化的表单是否完整
